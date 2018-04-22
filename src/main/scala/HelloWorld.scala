@@ -67,7 +67,45 @@ object HelloWorld {
     println( "str1 + str2 = " +  strcat(str1)(str2) )
     val curryingFunctionResult = curryingFunction(3)
     println( "curryingFunction(x:Int)(y:Int) :" +  curryingFunctionResult(5) )//8
+    //闭包
+    println( "closuresFunction :" +  closuresFunction(9) )//27
+    //StringBuilder字符串
+    val buf = new StringBuilder;
+    buf += 'a'
+    buf ++= "bcdef"
+    println( "StringBuilder : " + buf.toString + ",length():" + buf.length());//abcdef
+    //Concat字符串链接, 也可以使用加号(+)来连接
+    var str3 = "abcdec";
+    var str4 = "|aaa";
+    println( "String Concat : " + str3.concat(str4));//abcde|aaa
+    var floatVar = 12.456f
+    var intVar = 9999
+    var stringVar = "春林"
+    var fs = printf("浮点型变量为：%f, 整型变量为：%d, 字符串为：%s", floatVar, intVar, stringVar)
+    println("printf: " + fs)
+    println("charAt: " + str3.charAt(2))//c
+    var str5 = "b";
+    var str6 = "B";
+    //compareTo 相同0，大>0，小<0
+    println("compareTo: " + str5.compareTo(str6))//32
+    println("compareToIgnoreCase: " + str5.compareToIgnoreCase(str6))//0
+    //endsWith是否以指定的后缀结束
+    println("endsWith: " + str3.endsWith("cde"))//true
+    //返回此字符串的哈希码
+    println("hashCode: " + str5.hashCode())//98
+    //indexOf返回指定字符在此字符串中第一次出现处的索引
+    println("indexOf: " + str3.indexOf("c"))//2
+    println("indexOf: " + str3.indexOf("c",3))//5
+    //基本类似java
+    //--------------------------------------------------------------
+
+
+
+
   }
+  //闭包
+  var factor = 3
+  val closuresFunction = (i:Int) => i * factor
   //函数柯里化(Currying)
   def curryingFunction(x:Int)=(y:Int)=> x + y
   def strcat(s1: String)(s2: String) = {
