@@ -1,5 +1,6 @@
 package main.scala
 
+import Array._
 import java.util.Date
 
 object HelloWorld {
@@ -96,11 +97,53 @@ object HelloWorld {
     //indexOf返回指定字符在此字符串中第一次出现处的索引
     println("indexOf: " + str3.indexOf("c"))//2
     println("indexOf: " + str3.indexOf("c",3))//5
-    //基本类似java
     //--------------------------------------------------------------
+    //三种定义一维数组方式
+    var arr:Array[String] = new Array[String](3)
+    var arr2 = new Array[String](3)
+    var arr3 = Array("aaa", "bbb", "ccc")
+    arr2(0) = "aaa"; arr2(1) = "bbb"; arr2(4/2) = "ccc"
+    for ( x <- arr3 ) {
+      println( x )
+    }
+    var arr4 = Array(1.9, 2.9, 3.4, 3.5, 2)
+    var max = arr4(0);
+    for ( i <- 1 to (arr4.length - 1) ) {//1为初始值 然后 递增
+      if (arr4(i) > max) max = arr4(i);
+    }
+    println("最大值为 " + max);
+    //多维数组
+    var myMatrix = ofDim[Int](3,3)
+    // 创建矩阵
+    for (i <- 0 to 2) {
+      for ( j <- 0 to 2) {
+        myMatrix(i)(j) = j*10;
+      }
+    }
+    for (i <- 0 to 2) {
+      for ( j <- 0 to 2) {
+        println(" " + myMatrix(i)(j));
+      }
+    }
+    //合并数组
+    var arr5 = Array(1.9, 2.9, 3.4, 3.5)
+    var arr6 = Array(8.9, 7.9, 0.4, 3.5)
+    var arr7 =  concat( arr5, arr6)
+    for ( x <- arr7 ) {
+      println( x )
+    }
+    //创建区间数组 - range() 方法最后一个参数为步长，默认为 1
+    var myList1 = range(10, 20, 2)
+    var myList2 = range(10,20)
 
-
-
+    // 输出所有数组元素
+    for ( x <- myList1 ) {
+      print( " " + x )
+    }
+    println()
+    for ( x <- myList2 ) {
+      print( " " + x )
+    }
 
   }
   //闭包
