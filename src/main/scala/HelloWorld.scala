@@ -135,15 +135,41 @@ object HelloWorld {
     //创建区间数组 - range() 方法最后一个参数为步长，默认为 1
     var myList1 = range(10, 20, 2)
     var myList2 = range(10,20)
-
     // 输出所有数组元素
     for ( x <- myList1 ) {
       print( " " + x )
-    }
-    println()
+    };println()
     for ( x <- myList2 ) {
       print( " " + x )
+    };println()
+    //Scala 集合分为可变的和不可变的集合
+    // 定义整型 List
+    val d1 = List(1,2,3,4)
+    // 定义 Set
+    val d2 = Set(1,3,5,7)
+    // 定义 Map
+    val d3 = Map("one" -> 1, "two" -> 2, "three" -> 3)//集合: (one,1)集合: (two,2)集合: (three,3)
+    // 创建两个不同类型元素的元组, 元组是不同类型的值的集合
+    val d4 = (10, "ten")
+    // 定义 Option, Option[T] 表示有可能包含值的容器，也可能不包含值
+    val d5:Option[Int] = Some(5)
+    for ( x <- d3 ) {
+      print( "集合: " + x )
+    };println()
+    //Iterator（迭代器）
+    val it1 = Iterator("a1", "a2", "a3", "a4")
+    while (it1.hasNext){
+      println("Iterator:" + it1.next())
     }
+    val it2 = Iterator(20,40,2,50,69,90)
+    val it3 = Iterator(20,40,2,50,69,90)
+    val it4 = Iterator(20,40,2,50,69,90)
+    val it5 = Iterator(20,40,2,50,69,90)
+    println("最大元素是：" + it2.max )//90
+    println("最小元素是：" + it3.min )//2
+    println("it4.size 的值: " + it4.size )//6
+    println("it5.length 的值: " + it5.length )//6
+
 
   }
   //闭包
