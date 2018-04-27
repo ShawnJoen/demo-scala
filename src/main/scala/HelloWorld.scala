@@ -169,8 +169,50 @@ object HelloWorld {
     println("最小元素是：" + it3.min )//2
     println("it4.size 的值: " + it4.size )//6
     println("it5.length 的值: " + it5.length )//6
+    //类
+    //1.只有主构造函数才可以往基类的构造函数里写参数
+    //2.在子类中重写超类的抽象方法时，你不需要使用override关键字
+    //3.Scala 只允许继承一个父类
+    //4.Scala 没有 static 关键字，但是它也为我们提供了单例模式的实现方法，那就是使用关键字 object
+    //5.object和类的区别是，object对象不能带参数
+    //当单例对象与某个类共享同一个名称时，称作是这个类的伴生对象：companion object。
+    //你必须在同一个源文件里定义类和它的伴生对象。类被称为是这个单例对象的伴生类：companion class。
+    //类和它的伴生对象可以互相访问其私有成员
+    val pt = new Point(10, 20)
+    pt.move(10, 10)
+    printPoint
+    def printPoint {
+      println("printPoint x 的坐标点 : " + pt.x)
+      println("printPoint y 的坐标点 : " + pt.y)
+    }
+    val chunlin = new Shawn(33, "chunlin")
+    chunlin.salary = 50000
+    println(chunlin.age)//33
+    println(chunlin.name)//chunlin
+    println(chunlin.salary)//50000.0
+    println(chunlin.toString)//main.scala.HelloWorld$Shawn[name=chunlin][salary=50000.0]
 
 
+  }
+
+  //主类
+  class Point(xc: Int, yc: Int) {
+    var x: Int = xc
+    var y: Int = yc
+    def move(dx: Int, dy: Int) {
+      x = x + dx
+      y = y + dy
+      println ("x 的坐标点: " + x);//20
+      println ("y 的坐标点: " + y);//30
+    }
+  }//继承类
+  class Person(val age : Int){
+    val name = "no name"
+    override def toString = getClass.getName + "[name=" + name + "]"
+  }
+  class Shawn(age: Int, override val name: String) extends Person(age){
+    var salary = 0.0
+    override def toString = super.toString + "[salary=" + salary + "]"
   }
   //闭包
   var factor = 3
