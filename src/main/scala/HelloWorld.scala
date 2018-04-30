@@ -1,7 +1,14 @@
 package main.scala
 
+import java.io.{FileNotFoundException, FileReader, IOException, PrintWriter}
+
 import Array._
 import java.util.Date
+
+import scala.util.matching.Regex
+import java.io._
+
+import scala.io.Source
 
 object HelloWorld {
   def main(args: Array[String]) {
@@ -191,14 +198,123 @@ object HelloWorld {
     println(chunlin.name)//chunlin
     println(chunlin.salary)//50000.0
     println(chunlin.toString)//main.scala.HelloWorld$Shawn[name=chunlin][salary=50000.0]
-
-
+    //使用trait抽象类的 方法的实现(isNotEqual) 和 抽象方法的子类实现(isEqual)
+    val p1 = new Point(2, 3)
+    val p2 = new Point(2, 4)
+    val p3 = new Point(3, 3)
+    println(p1.isNotEqual(p2))//false
+    println(p1.isEqual(p2))//true
+    println(p1.isEqual(p3))//false
+    println(p1.isNotEqual(2))//true 不是同一个类实现
+    //模式匹配 match 对应 Java 里的 switch
+    //一个匹配的case，剩下的case不会继续匹配
+    //按顺序匹配, 没有完全相同的是 数据类型优先与_
+    println(matchTest("two"))//2
+    println(matchTest("test"))//many
+    println(matchTest(1))//one
+    println(matchTest(999))//scala.Int
+    //样例类 模式匹配
+    //声明样例类时，下面的过程自动发生
+    //构造器的每个参数都成为val，除非显式被声明为var，但是并不推荐这么做
+    //在伴生对象中提供了apply方法，所以可以不使用new关键字就可构建对象
+    //提供unapply方法使模式匹配可以工作
+    //生成toString、equals、hashCode和copy方法，除非显示给出这些方法的定义
+    val alice = new TestCaseClass("Alice", 25)
+    val bob = TestCaseClass("Bob", 32)
+    val charlie = new TestCaseClass("Charlie", 32)
+    for (person <- List(alice, bob, charlie)) {
+      person match {
+        case TestCaseClass("Alice", 25) => println("Hi Alice!")
+        case TestCaseClass("Bob", 32) => println("Hi Bob!")
+        case TestCaseClass(name, age) =>
+          println("Age: " + age + " year, name: " + name + "?")
+      }
+    }
+    //正则表达式 使用正则表达式查找单词 Scala
+    //findFirstIn 首个匹配项
+    //findAllIn 所有的匹配项
+    //mkString( ) 方法来连接正则表达式匹配结果的字符串
+    //(|)来设置不同的模式
+    val pattern1 = "Scala".r
+    val testStr1 = "Scala is Scalable and cool"
+    println(pattern1 findFirstIn testStr1)//Some(Scala)
+    val pattern2 = new Regex("(S|s)cala")  // 首字母可以是大写 S 或小写 s
+    val testStr2 = "Scala is scalable and cool"
+    println((pattern2 findAllIn testStr2).mkString(","))//使用逗号,连接返回结果-> Scala,scala
+    val pattern3 = "(S|s)cala".r
+    val testStr3 = "Scala is scalable and cool"
+    println(pattern3 replaceFirstIn(testStr3, "Java"))//Java is scalable and cool
+    println(pattern3 replaceAllIn(testStr3, "Java"))//Java is Javable and cool
+    val pattern4 = new Regex("abl[ae]\\d+")
+    val testStr4 = "ablaw is able1 and cool"
+    println((pattern4 findAllIn testStr4).mkString(","))//able1
+    //抛出异常,捕获异常 基本和其他语言相同
+    //throw new IllegalArgumentException
+    try {
+      val f = new FileReader("input.txt")
+    } catch {
+      case e: FileNotFoundException =>{
+        println("Missing file exception")//v
+      } case e: IOException => {
+        println("IO Exception")
+      } case e: Throwable => {
+        println("Throwable")
+      }
+    } finally {
+      println("Exiting finally...")
+    }
+    //提取器(Extractor)
+    //象定义了两个方法： apply 和 unapply 方法。通过 apply 方法我们无需使用 new 操作就可以创建对象
+    //构造 字符串对象 Zara@gmail.com
+    //可以有0个或者多个的参数
+    println ("Apply 方法 : " + apply2("Zara", "gmail.com"))//Apply 方法 : Zara@gmail.com
+    //查询 字符串对象 Zara@gmail.com
+    println ("Unapply 方法 : " + unapply2("Zara@gmail.com"))//Unapply 方法 : Some((Zara,gmail.com))
+    //未查到 输出 None
+    println ("Unapply 方法 : " + unapply2("Zara Ali"))//Unapply 方法 : None
+    //文件I/O
+    val writer = new PrintWriter(new File("test.txt" ))
+    writer.write("语法测试1\n语法测试2")
+    writer.close()
+    //从文件上读取内容
+    println("文件内容为:" )
+    Source.fromFile("test.txt" ).foreach{
+      print
+    }
   }
 
+  //注入方法 (可选)
+  def apply2(user: String, domain: String) = {
+    user +"@"+ domain
+  }
+  //提取方法（必选）
+  def unapply2(str: String): Option[(String, String)] = {
+    val parts = str split "@"
+    if (parts.length == 2){
+      Some(parts(0), parts(1))
+    }else{
+      None
+    }
+  }
+  //样例类
+  case class TestCaseClass(name: String, age: Int)
+  //模式匹配 match
+  def matchTest(x: Any): Any = x match {
+    case 1 => "one"
+    case "two" => 2
+    case aa: Int => "scala.Int"//相比isInstanceOf来判断类型
+    case _ => "many" //_为java switch的default
+  }
+  //trait 抽象类
+  trait Equal {
+    def isEqual(x: Any): Boolean
+    def isNotEqual(x: Any): Boolean = !isEqual(x)
+  }
   //主类
-  class Point(xc: Int, yc: Int) {
+  class Point(xc: Int, yc: Int) extends Equal {
     var x: Int = xc
     var y: Int = yc
+    def isEqual(obj: Any) = obj.isInstanceOf[Point] && obj.asInstanceOf[Point].x == x
     def move(dx: Int, dy: Int) {
       x = x + dx
       y = y + dy
